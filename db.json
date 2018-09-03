@@ -1,0 +1,18 @@
+{
+  "posts": [
+    {
+      "title": "Aenean commodo ligula eget dolor",
+      "author": "Andre",
+      "id": 5
+    },
+    {
+      "title": "Phasellus volutpat metus eget egestas",
+      "author": "Nata",
+      "id": 6
+    }
+  ],
+  "comments": [],
+  "profile": {
+    "name": "typicode"
+  }
+}
