@@ -31,6 +31,7 @@ class Blog extends Component {
           postEdit: false
 
       }
+
     }
 
     componentDidMount () {
@@ -38,12 +39,13 @@ class Blog extends Component {
             .then( response => {
                 this.setState({posts: response.data});
                 this.setState({loader: false});
-            } );
+            });
+
+        console.log('[app.js] ComponentDidMount');
     }
 
     postSelectedHandler = (id) => {
         this.setState({selectedPostId: id});
-        // console.log(this.state.selectedPostId);
     }
 
     postDataHandler = () => {
@@ -56,10 +58,58 @@ class Blog extends Component {
             .then(response => {
               this.setState({updated: true, selectedPostId: null});
               this.setState({newPost: response.data, singleDeleted: false});
-            });
+      });
+    }
+
+    
+
+    // FULLPOST DEL
+    deletePostHandler() {
+      axios.delete('/posts/' + this.state.selectedPostId)
+            .then(response => {
+              this.setState({loadedPost: null, selectedPostId: null});
+              this.setState({singleDeleted: true, updated: false, postEdit:false});
+      });
+    }
+
+    
+
+    // CLOSE FULLPOST
+    closeFullPost = () => {
+        this.setState({closeFull: true});
+       
+    }
+
+    // EDIT FULLPOST
+    editPostHandler () {
+      this.setState({selectedEditId: this.state.selectedPostId});
+      this.setState({checkEdit: true});
+    }
+
+
+    // COMPONENT TEST
+    componentWillMount(){
+      console.log('[app.js] Comopnent Will Mount');
+    }
+
+    componentWillReceiveProps(nextProps){
+      console.log('[UPDATE] Component Will Receive Props')
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+      console.log('Should Component Update', nextProps, nextState);
+      
+
+      return true;
+      
+    }
+
+    componentWillUpdate(nextProps, nextState){
+      console.log('[app.js] component Will Update', nextProps, nextState);
     }
 
     componentDidUpdate(){
+      console.log('[app.js] componentDidUpdate');
       if(this.state.updated){
         axios.get( '/posts' )
             .then( response => {
@@ -67,7 +117,7 @@ class Blog extends Component {
                 this.setState({loader: false, updated: false, singleDeleted: false});
                 this.setState({title: '', author: ''});
                 this.setState({titleSl: '', authorSl: '', selectedPost: false});
-            } );
+        });
       }
 
       if(this.state.singleDeleted===true){
@@ -77,12 +127,13 @@ class Blog extends Component {
                 this.setState({updated: false, singleDeleted: false});
                 this.setState({titleSl: '', authorSl: '', selectedPost: false});
 
-            } );
+        });
       }
       // SELECTED
       if(this.state.selectedPostId){
           if ( !this.state.loadedPost ||
-            (this.state.loadedPost && this.state.loadedPost.id !== this.state.selectedPostId) ) {
+            (this.state.loadedPost &&
+              this.state.loadedPost.id !== this.state.selectedPostId) ) {
 
             // this.state.loaderSpinner= true;
             axios.get('/posts/' + this.state.selectedPostId)
@@ -92,11 +143,11 @@ class Blog extends Component {
                     this.setState({titleSl: response.data.title});
                     this.setState({authorSl: response.data.author});
                     this.setState({selectedPost: true});
+                    // this.setState({selectedPostId: null});
 
-                  });
+            });
           }
-        }
-
+      }
       if(this.state.closeFull){
         this.setState({titleSl: '', authorSl: '', selectedPost: false, closeFull: false});
       }
@@ -104,32 +155,18 @@ class Blog extends Component {
       if(this.state.checkEdit===true){
         this.setState({checkEdit: false, postEdit: true});
       }
+    } // componentDidUpdate
+
+    componentWillUnmount(){
+      console.log('[app.js] Component Will Unmount');
     }
 
-    // FULLPOST DEL
-    deletePostHandler() {
-      axios.delete('/posts/' + this.state.selectedPostId)
-            .then(response => {
-              this.setState({loadedPost: null, selectedPostId: null});
-              this.setState({singleDeleted: true, updated: false, postEdit:false});
-            });
-    }
-
-    // CLOSE FULLPOST
-    closeFullPost = () => {
-        this.setState({closeFull: true});
-        // console.log(this.state.selectedPostId);
-    }
-
-    // EDIT FULLPOST
-    editPostHandler () {
-      this.setState({selectedEditId: this.state.selectedPostId});
-      this.setState({checkEdit: true});
-    }
+    // END COMPONENT TEST
 
     render () {
+        console.log('[app.js] Render');
         if(this.state.loader===true){
-          return posts = <Spinner />;
+          return <Spinner />;
         }
 
         let posts = this.state.posts.map(post => {
@@ -151,7 +188,7 @@ class Blog extends Component {
 
         let singlepost = '';
 
-        if(this.state.selectedPost===true){
+        if(this.state.selectedPost === true){
           singlepost = (
             <FullPost
               title={this.state.titleSl}
@@ -163,9 +200,7 @@ class Blog extends Component {
           )
         }if(this.state.postEdit===true){
           console.log('edit');
-          this.state.postEdit= false;
-        }else{
-          let singlepost = '';
+          this.setState({postEdit: false});
         }
 
         return (

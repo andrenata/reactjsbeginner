@@ -1,14 +1,14 @@
 {
   "posts": [
     {
-      "title": "Aenean commodo ligula eget dolor",
+      "title": "Vestibulum dapibus nunc ac augue",
       "author": "Andre",
-      "id": 5
+      "id": 2
     },
     {
-      "title": "Aenean leo ligula porttitor eu",
-      "author": "Andre",
-      "id": 6
+      "title": "Etiam sollicitudin ipsum eu pulvinar",
+      "author": "Nata",
+      "id": 3
     }
   ],
   "comments": [],
