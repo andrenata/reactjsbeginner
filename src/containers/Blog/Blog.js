@@ -31,15 +31,9 @@ class Blog extends Component {
           postEdit: false
 
       }
-      console.log('Constuctor inside');
-    }
-
-    componentWillMount() {
-      console.log('WillMount Inside');
     }
 
     componentDidMount () {
-        console.log('DidMount Inside');
         axios.get( '/posts' )
             .then( response => {
                 this.setState({posts: response.data});
@@ -66,7 +60,6 @@ class Blog extends Component {
     }
 
     componentDidUpdate(){
-      console.log('DidUpdate Inside');
       if(this.state.updated){
         axios.get( '/posts' )
             .then( response => {
@@ -135,8 +128,6 @@ class Blog extends Component {
     }
 
     render () {
-        console.log('render inside');
-
         if(this.state.loader===true){
           return posts = <Spinner />;
         }
